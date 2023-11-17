@@ -124,10 +124,50 @@ public class BasicItemController {
      * @param item
      * @return
      */
-    @PostMapping("/add")
+//    @PostMapping("/add")
     public String addItemV4(Item item) {
         itemRepository.save(item);
         return "basic/item";
+    }
+
+    /**
+     * 상품 처리 등록5, PRG 패턴 적용
+     * @param item
+     * @return
+     */
+    @PostMapping("/add")
+    public String addItemV5(Item item){
+        itemRepository.save(item);
+        return "redirect:/basic/items/" + item.getId();
+    }
+
+    /**
+     * 상품 수정 폼
+      * @param itemId
+     * @param model
+     * @return
+     */
+    @GetMapping("/{itemId}/edit")
+    public String editForm(@PathVariable Long itemId, Model model){
+        Item item = itemRepository.findById(itemId);
+
+        model.addAttribute("item",item);
+
+        return "basic/editForm";
+    }
+
+    /**
+     * 상품 수정 처리
+     * @param itemId
+     * @param item
+     * @return
+     */
+    @PostMapping("/{itemId}/edit")
+    public String edit(@PathVariable Long itemId,
+                       @ModelAttribute Item item){
+        itemRepository.update(itemId, item);
+
+        return "redirect:/basic/items/{itemId}";
     }
 
 
